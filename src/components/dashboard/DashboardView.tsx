@@ -5,7 +5,8 @@ import { StatCard } from './StatCard';
 import { TrendChart } from './TrendChart';
 import { ActivityList } from './ActivityList';
 import { useAppState } from '@/hooks/useAppState';
-import { fetchDashboard } from '@/services/api';
+import { fetchDashboardFromSupabase } from '@/services/dashboardService';
+import { useAuth } from '@/contexts/AuthContext';
 
 type LoadState = 'loading' | 'success' | 'error';
 
@@ -21,10 +22,13 @@ export function DashboardView() {
     setCachedChartData,
   } = useAppState();
 
+  const { user } = useAuth();
+
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [mensual, setMensual] = useState(0);
 
   const loadDashboardData = async () => {
+    if (!user) return;
     setLoadState('loading');
 
     try {
@@ -36,7 +40,7 @@ export function DashboardView() {
       const year = currentDashboardDate.getFullYear();
       const month = String(currentDashboardDate.getMonth() + 1).padStart(2, '0');
 
-      const data = await fetchDashboard(year, month);
+      const data = await fetchDashboardFromSupabase(year, month, user.id);
       const kpis = data.kpis;
 
       // Cache real-time data for current month
@@ -63,8 +67,10 @@ export function DashboardView() {
   };
 
   useEffect(() => {
-    loadDashboardData();
-  }, [currentDashboardDate]);
+    if (user) {
+      loadDashboardData();
+    }
+  }, [currentDashboardDate, user]);
 
   if (loadState === 'loading') {
     return (

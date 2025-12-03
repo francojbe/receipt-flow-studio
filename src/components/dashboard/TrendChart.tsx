@@ -49,7 +49,7 @@ export function TrendChart({ data }: TrendChartProps) {
               stroke="hsl(211, 100%, 50%)"
               strokeWidth={2}
               fill="url(#colorMonto)"
-              dot={{ fill: 'white', stroke: 'hsl(211, 100%, 50%)', strokeWidth: 2, r: 4 }}
+              dot={false}
               activeDot={{ r: 6, stroke: 'hsl(211, 100%, 50%)', strokeWidth: 2 }}
             />
           </AreaChart>

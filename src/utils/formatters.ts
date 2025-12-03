@@ -1,8 +1,8 @@
 // Currency formatter for Chilean Pesos
 export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('es-CL', { 
-    style: 'currency', 
-    currency: 'CLP' 
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP'
   }).format(amount);
 };
 
@@ -24,7 +24,9 @@ export const formatDate = (dateString: string): string => {
 
 // Format month label
 export const formatMonthLabel = (date: Date): string => {
-  return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long' });
+  const monthName = date.toLocaleDateString('es-ES', { month: 'long' });
+  const year = date.getFullYear();
+  return `${monthName} ${year}`;
 };
 
 // Get current datetime for input
@@ -39,15 +41,25 @@ export const getCurrentMonth = (): string => {
   return new Date().toISOString().slice(0, 7);
 };
 
+// Format YYYY-MM to "Month YYYY"
+export const formatMonthYear = (monthString: string): string => {
+  if (!monthString) return '';
+  const [year, month] = monthString.split('-');
+  const date = new Date(parseInt(year), parseInt(month) - 1);
+  // Format as "Month YYYY" manually to avoid "de"
+  const monthName = date.toLocaleDateString('es-ES', { month: 'long' });
+  return `${monthName} ${year}`;
+};
+
 // Convert data to CSV
 export const convertToCSV = (data: Record<string, unknown>[]): string => {
   if (!data || data.length === 0) return '';
-  
+
   const headers = Object.keys(data[0]);
   const csvRows: string[] = [];
-  
+
   csvRows.push(headers.join(','));
-  
+
   for (const row of data) {
     const values = headers.map(header => {
       const escaped = ('' + row[header]).replace(/"/g, '\\"');
@@ -55,7 +67,7 @@ export const convertToCSV = (data: Record<string, unknown>[]): string => {
     });
     csvRows.push(values.join(','));
   }
-  
+
   return csvRows.join('\n');
 };
 

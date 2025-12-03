@@ -1,21 +1,24 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Download } from 'lucide-react';
-import { fetchCartola, type CartolaData } from '@/services/api';
-import { formatCurrency, getCurrentMonth, convertToCSV, downloadCSV } from '@/utils/formatters';
+import { fetchCartolaFromSupabase } from '@/services/cartolaService';
+import { type CartolaData } from '@/services/api';
+import { formatCurrency, getCurrentMonth, convertToCSV, downloadCSV, formatMonthYear } from '@/utils/formatters';
 
 export function CartolaView() {
+  const { user } = useAuth();
   const [monthInput, setMonthInput] = useState(getCurrentMonth());
   const [loading, setLoading] = useState(true);
   const [cartolaData, setCartolaData] = useState<CartolaData[]>([]);
 
   const loadCartola = async (month: string) => {
-    if (!month) return;
+    if (!month || !user) return;
 
     setLoading(true);
 
     try {
       const [year, monthNum] = month.split('-');
-      const data = await fetchCartola(year, monthNum);
+      const data = await fetchCartolaFromSupabase(year, monthNum, user.id);
       setCartolaData(data);
     } catch (error) {
       console.error('Cartola Error:', error);
@@ -27,8 +30,10 @@ export function CartolaView() {
 
   // Auto-load current month on mount
   useEffect(() => {
-    loadCartola(monthInput);
-  }, []);
+    if (user) {
+      loadCartola(monthInput);
+    }
+  }, [user]);
 
   const handleMonthChange = (value: string) => {
     setMonthInput(value);
@@ -49,12 +54,17 @@ export function CartolaView() {
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex-shrink-0">
             Periodo
           </span>
-          <input
-            type="month"
-            value={monthInput}
-            onChange={(e) => handleMonthChange(e.target.value)}
-            className="text-sm font-medium text-foreground bg-transparent text-right focus:outline-none p-2 min-w-0 flex-1"
-          />
+          <div className="relative flex-1 min-w-0">
+            <div className="text-sm font-medium text-foreground text-right p-2 capitalize">
+              {formatMonthYear(monthInput)}
+            </div>
+            <input
+              type="month"
+              value={monthInput}
+              onChange={(e) => handleMonthChange(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
       </div>
 

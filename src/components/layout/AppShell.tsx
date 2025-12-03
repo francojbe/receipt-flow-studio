@@ -1,7 +1,9 @@
 import { ReactNode } from 'react';
-import { FileText, PieChart, List } from 'lucide-react';
+import { FileText, PieChart, List, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAppState, ViewType } from '@/hooks/useAppState';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface HeaderConfig {
   title: string;
@@ -34,6 +36,14 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const { currentView, setCurrentView } = useAppState();
   const config = headerConfigs[currentView];
+  const navigate = useNavigate();
+  const { signOut, user } = useAuth();
+  const username = user?.email?.split('@')[0];
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <main className="w-full max-w-md bg-background sm:bg-card sm:rounded-4xl sm:shadow-ios-lg overflow-hidden h-screen sm:h-[850px] flex flex-col relative border border-border/50">
@@ -48,8 +58,19 @@ export function AppShell({ children }: AppShellProps) {
               {config.title}
             </h1>
           </div>
-          <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-primary shadow-sm">
-            {config.icon}
+          <div className="flex items-center gap-3">
+            {username && (
+              <span className="text-sm font-medium text-muted-foreground capitalize">
+                {username}
+              </span>
+            )}
+            <button
+              onClick={handleLogout}
+              className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shadow-sm"
+              title="Cerrar Sesión"
+            >
+              <LogOut className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </header>

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { UploadSection } from './UploadSection';
 import { ManualEntryForm } from './ManualEntryForm';
 import { ImagePreview } from './ImagePreview';
@@ -9,12 +10,13 @@ type ViewState = 'upload' | 'manual' | 'preview' | 'feedback';
 type FeedbackState = 'loading' | 'success' | 'error';
 
 export function ScannerView() {
+  const { user } = useAuth();
   const [viewState, setViewState] = useState<ViewState>('upload');
   const [feedbackState, setFeedbackState] = useState<FeedbackState>('loading');
   const [errorMessage, setErrorMessage] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewSrc, setPreviewSrc] = useState('');
-  
+
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,7 +40,8 @@ export function ScannerView() {
     setFeedbackState('loading');
 
     try {
-      const success = await uploadImage(selectedFile);
+      if (!user) throw new Error('User not authenticated');
+      const success = await uploadImage(selectedFile, user.id, user.email);
       if (success) {
         setFeedbackState('success');
       } else {
@@ -56,12 +59,13 @@ export function ScannerView() {
     setFeedbackState('loading');
 
     try {
+      if (!user) throw new Error('User not authenticated');
       const success = await submitManualEntry({
         monto: data.amount,
         fecha: data.date,
         comercio: data.merchant,
         tipo: 'Efectivo',
-      });
+      }, user.id, user.email);
 
       if (success) {
         setFeedbackState('success');

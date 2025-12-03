@@ -49,9 +49,14 @@ export interface CartolaData {
 }
 
 // Upload image file
-export async function uploadImage(file: File): Promise<boolean> {
+export async function uploadImage(file: File, userId: string, userEmail?: string): Promise<boolean> {
+  console.log('📤 Subiendo imagen...');
+  console.log('👤 Usuario:', userId, userEmail);
+
   const formData = new FormData();
   formData.append('file', file);
+  formData.append('user_id', userId);
+  if (userEmail) formData.append('user_email', userEmail);
 
   const response = await fetch(UPLOAD_URL, {
     method: 'POST',
@@ -62,11 +67,14 @@ export async function uploadImage(file: File): Promise<boolean> {
 }
 
 // Submit manual entry
-export async function submitManualEntry(entry: ManualEntry): Promise<boolean> {
+export async function submitManualEntry(entry: ManualEntry, userId: string, userEmail?: string): Promise<boolean> {
+  console.log('📝 Enviando registro manual...');
+  console.log('👤 Usuario:', userId, userEmail);
+
   const response = await fetch(MANUAL_UPLOAD_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(entry),
+    body: JSON.stringify({ ...entry, user_id: userId, user_email: userEmail }),
   });
 
   return response.ok;
@@ -75,7 +83,7 @@ export async function submitManualEntry(entry: ManualEntry): Promise<boolean> {
 // Fetch dashboard data
 export async function fetchDashboard(year: number, month: string): Promise<DashboardData> {
   const queryDate = `${year}-${month}`;
-  
+
   const response = await fetch(DASHBOARD_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -88,7 +96,7 @@ export async function fetchDashboard(year: number, month: string): Promise<Dashb
 
   const rawData = await response.json();
   const data = Array.isArray(rawData) ? rawData[0] : rawData;
-  
+
   return {
     kpis: data.kpis || data,
     ultimos_movimientos: data.ultimos_movimientos || [],
@@ -97,13 +105,13 @@ export async function fetchDashboard(year: number, month: string): Promise<Dashb
 }
 
 // Fetch cartola data
-export async function fetchCartola(year: string, month: string): Promise<CartolaData[]> {
+export async function fetchCartola(year: string, month: string, userId: string): Promise<CartolaData[]> {
   const monthInput = `${year}-${month}`;
-  
+
   const response = await fetch(CARTOLA_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ fecha: monthInput, mes: month, anio: year }),
+    body: JSON.stringify({ fecha: monthInput, mes: month, anio: year, user_id: userId }),
   });
 
   if (!response.ok) {
@@ -125,6 +133,6 @@ export async function fetchCartola(year: string, month: string): Promise<Cartola
 
   // Sort by date descending
   rows.sort((a, b) => new Date(b.fecha || b.date || '').getTime() - new Date(a.fecha || a.date || '').getTime());
-  
+
   return rows;
 }
