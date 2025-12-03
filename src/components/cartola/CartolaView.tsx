@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Download } from 'lucide-react';
 import { fetchCartola, type CartolaData } from '@/services/api';
 import { formatCurrency, getCurrentMonth, convertToCSV, downloadCSV } from '@/utils/formatters';
 
 export function CartolaView() {
   const [monthInput, setMonthInput] = useState(getCurrentMonth());
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [cartolaData, setCartolaData] = useState<CartolaData[]>([]);
-  const hasLoadedRef = useRef(false);
 
   const loadCartola = async (month: string) => {
     if (!month) return;
@@ -26,12 +25,9 @@ export function CartolaView() {
     }
   };
 
-  // Auto-load on mount
+  // Auto-load current month on mount
   useEffect(() => {
-    if (!hasLoadedRef.current) {
-      hasLoadedRef.current = true;
-      loadCartola(monthInput);
-    }
+    loadCartola(monthInput);
   }, []);
 
   const handleMonthChange = (value: string) => {
