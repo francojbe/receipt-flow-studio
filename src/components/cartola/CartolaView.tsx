@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Download } from 'lucide-react';
 import { fetchCartola, type CartolaData } from '@/services/api';
 import { formatCurrency, getCurrentMonth, convertToCSV, downloadCSV } from '@/utils/formatters';
@@ -7,17 +7,16 @@ export function CartolaView() {
   const [monthInput, setMonthInput] = useState(getCurrentMonth());
   const [loading, setLoading] = useState(false);
   const [cartolaData, setCartolaData] = useState<CartolaData[]>([]);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const hasLoadedRef = useRef(false);
 
-  const loadCartola = async () => {
-    if (!monthInput) return;
+  const loadCartola = async (month: string) => {
+    if (!month) return;
 
     setLoading(true);
-    setHasLoaded(true);
 
     try {
-      const [year, month] = monthInput.split('-');
-      const data = await fetchCartola(year, month);
+      const [year, monthNum] = month.split('-');
+      const data = await fetchCartola(year, monthNum);
       setCartolaData(data);
     } catch (error) {
       console.error('Cartola Error:', error);
@@ -25,6 +24,19 @@ export function CartolaView() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Auto-load on mount
+  useEffect(() => {
+    if (!hasLoadedRef.current) {
+      hasLoadedRef.current = true;
+      loadCartola(monthInput);
+    }
+  }, []);
+
+  const handleMonthChange = (value: string) => {
+    setMonthInput(value);
+    loadCartola(value);
   };
 
   const handleDownload = () => {
@@ -37,18 +49,15 @@ export function CartolaView() {
     <section className="flex flex-col h-full pt-2 animate-fade-in">
       {/* Month Filter */}
       <div className="ios-card p-2 mb-4">
-        <div className="flex items-center justify-between px-3">
-          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+        <div className="flex items-center justify-between px-3 gap-2">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex-shrink-0">
             Periodo
           </span>
           <input
             type="month"
             value={monthInput}
-            onChange={(e) => {
-              setMonthInput(e.target.value);
-            }}
-            onBlur={loadCartola}
-            className="text-sm font-medium text-foreground bg-transparent text-right focus:outline-none p-2"
+            onChange={(e) => handleMonthChange(e.target.value)}
+            className="text-sm font-medium text-foreground bg-transparent text-right focus:outline-none p-2 min-w-0 flex-1"
           />
         </div>
       </div>
@@ -65,13 +74,7 @@ export function CartolaView() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border text-muted-foreground">
-              {!hasLoaded ? (
-                <tr>
-                  <td colSpan={3} className="px-5 py-10 text-center text-muted-foreground text-xs">
-                    Selecciona un periodo
-                  </td>
-                </tr>
-              ) : loading ? (
+              {loading ? (
                 <tr>
                   <td colSpan={3} className="px-5 py-10 text-center">
                     <div className="flex justify-center">
