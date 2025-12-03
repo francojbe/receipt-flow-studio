@@ -1,12 +1,19 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { AppShell } from '@/components/layout/AppShell';
+import { ScannerView } from '@/components/scanner/ScannerView';
+import { DashboardView } from '@/components/dashboard/DashboardView';
+import { CartolaView } from '@/components/cartola/CartolaView';
+import { useAppState } from '@/hooks/useAppState';
 
 const Index = () => {
+  const { currentView } = useAppState();
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex items-center justify-center sm:p-4">
+      <AppShell>
+        {currentView === 'scanner' && <ScannerView />}
+        {currentView === 'dashboard' && <DashboardView />}
+        {currentView === 'cartola' && <CartolaView />}
+      </AppShell>
     </div>
   );
 };
