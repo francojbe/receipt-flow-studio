@@ -63,7 +63,7 @@ export function ActivityList({
                     <p className="text-[10px] text-muted-foreground flex gap-2">
                       <span>{displayDate}</span>
                       {displayTime && <>
-                          <span className="text-border">|</span>
+                          
                           
                         </>}
                     </p>
