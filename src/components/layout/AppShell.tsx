@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppState, ViewType } from '@/hooks/useAppState';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
+import { ModeToggle } from '../mode-toggle';
 
 interface HeaderConfig {
   title: string;
@@ -64,6 +65,7 @@ export function AppShell({ children }: AppShellProps) {
                 {username}
               </span>
             )}
+            <ModeToggle />
             <button
               onClick={handleLogout}
               className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shadow-sm"
