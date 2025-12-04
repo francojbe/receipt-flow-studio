@@ -4,6 +4,7 @@ import { Eye, EyeOff, LogIn, Lock, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { ModeToggle } from '@/components/mode-toggle';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -50,6 +51,10 @@ const Login = () => {
                 <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-primary/10 to-transparent pointer-events-none" />
                 <div className="absolute -top-20 -right-20 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute top-40 -left-20 w-40 h-40 bg-purple/5 rounded-full blur-3xl pointer-events-none" />
+
+                <div className="absolute top-6 right-6 z-20">
+                    <ModeToggle />
+                </div>
 
                 <div className="flex-1 flex flex-col justify-center px-8 relative z-10">
 
