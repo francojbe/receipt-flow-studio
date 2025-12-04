@@ -49,23 +49,33 @@ export function CartolaView() {
   return (
     <section className="flex flex-col h-full pt-2 animate-fade-in">
       {/* Month Filter */}
-      <div className="ios-card p-2 mb-4">
+      <div className="ios-card p-2 mb-4 relative">
         <div className="flex items-center justify-between px-3 gap-2">
           <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider flex-shrink-0">
             Periodo
           </span>
-          <div className="relative flex-1 min-w-0">
-            <div className="text-sm font-medium text-foreground text-right p-2 capitalize">
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-medium text-foreground text-right p-2 capitalize pointer-events-none">
               {formatMonthYear(monthInput)}
             </div>
-            <input
-              type="month"
-              value={monthInput}
-              onChange={(e) => handleMonthChange(e.target.value)}
-              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            />
           </div>
         </div>
+        <input
+          type="month"
+          value={monthInput}
+          onChange={(e) => handleMonthChange(e.target.value)}
+          onClick={(e) => {
+            try {
+              // Explicitly show picker on click for better UX
+              if ('showPicker' in e.currentTarget) {
+                (e.currentTarget as any).showPicker();
+              }
+            } catch (error) {
+              // Fallback or ignore if not supported
+            }
+          }}
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+        />
       </div>
 
       {/* Table */}

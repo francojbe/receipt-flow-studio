@@ -49,14 +49,15 @@ export interface CartolaData {
 }
 
 // Upload image file
-export async function uploadImage(file: File, userId: string, userEmail?: string): Promise<boolean> {
+export async function uploadImage(file: File, userId: string, userEmail?: string, userName?: string): Promise<boolean> {
   console.log('📤 Subiendo imagen...');
-  console.log('👤 Usuario:', userId, userEmail);
+  console.log('👤 Usuario:', userId, userEmail, userName);
 
   const formData = new FormData();
   formData.append('file', file);
   formData.append('user_id', userId);
   if (userEmail) formData.append('user_email', userEmail);
+  if (userName) formData.append('user_name', userName);
 
   const response = await fetch(UPLOAD_URL, {
     method: 'POST',
@@ -67,14 +68,14 @@ export async function uploadImage(file: File, userId: string, userEmail?: string
 }
 
 // Submit manual entry
-export async function submitManualEntry(entry: ManualEntry, userId: string, userEmail?: string): Promise<boolean> {
+export async function submitManualEntry(entry: ManualEntry, userId: string, userEmail?: string, userName?: string): Promise<boolean> {
   console.log('📝 Enviando registro manual...');
-  console.log('👤 Usuario:', userId, userEmail);
+  console.log('👤 Usuario:', userId, userEmail, userName);
 
   const response = await fetch(MANUAL_UPLOAD_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...entry, user_id: userId, user_email: userEmail }),
+    body: JSON.stringify({ ...entry, user_id: userId, user_email: userEmail, user_name: userName }),
   });
 
   return response.ok;

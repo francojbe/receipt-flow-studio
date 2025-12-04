@@ -41,7 +41,17 @@ export function ScannerView() {
 
     try {
       if (!user) throw new Error('User not authenticated');
-      const success = await uploadImage(selectedFile, user.id, user.email);
+
+      let userName = '';
+      try {
+        if (user.user_metadata) {
+          userName = user.user_metadata.full_name || user.user_metadata.name || '';
+        }
+      } catch (e) {
+        console.warn('Could not retrieve user name', e);
+      }
+
+      const success = await uploadImage(selectedFile, user.id, user.email, userName);
       if (success) {
         setFeedbackState('success');
       } else {
@@ -60,12 +70,22 @@ export function ScannerView() {
 
     try {
       if (!user) throw new Error('User not authenticated');
+
+      let userName = '';
+      try {
+        if (user.user_metadata) {
+          userName = user.user_metadata.full_name || user.user_metadata.name || '';
+        }
+      } catch (e) {
+        console.warn('Could not retrieve user name', e);
+      }
+
       const success = await submitManualEntry({
         monto: data.amount,
         fecha: data.date,
         comercio: data.merchant,
         tipo: 'Efectivo',
-      }, user.id, user.email);
+      }, user.id, user.email, userName);
 
       if (success) {
         setFeedbackState('success');

@@ -44,11 +44,17 @@ export const getCurrentMonth = (): string => {
 // Format YYYY-MM to "Month YYYY"
 export const formatMonthYear = (monthString: string): string => {
   if (!monthString) return '';
-  const [year, month] = monthString.split('-');
-  const date = new Date(parseInt(year), parseInt(month) - 1);
-  // Format as "Month YYYY" manually to avoid "de"
-  const monthName = date.toLocaleDateString('es-ES', { month: 'long' });
-  return `${monthName} ${year}`;
+  try {
+    const [year, month] = monthString.split('-');
+    if (!year || !month) return monthString;
+    const date = new Date(parseInt(year), parseInt(month) - 1);
+    if (isNaN(date.getTime())) return monthString;
+    // Format as "Month YYYY" manually to avoid "de"
+    const monthName = date.toLocaleDateString('es-ES', { month: 'long' });
+    return `${monthName} ${year}`;
+  } catch (e) {
+    return monthString;
+  }
 };
 
 // Convert data to CSV
