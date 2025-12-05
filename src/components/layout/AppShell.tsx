@@ -5,6 +5,7 @@ import { useAppState, ViewType } from '@/hooks/useAppState';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/contexts/AuthContext';
 import { ModeToggle } from '../mode-toggle';
+import { SideMenu } from './SideMenu';
 
 interface HeaderConfig {
   title: string;
@@ -60,19 +61,7 @@ export function AppShell({ children }: AppShellProps) {
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            {username && (
-              <span className="text-sm font-medium text-muted-foreground capitalize">
-                {username}
-              </span>
-            )}
-            <ModeToggle />
-            <button
-              onClick={handleLogout}
-              className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors shadow-sm"
-              title="Cerrar Sesión"
-            >
-              <LogOut className="w-5 h-5" />
-            </button>
+            <SideMenu />
           </div>
         </div>
       </header>

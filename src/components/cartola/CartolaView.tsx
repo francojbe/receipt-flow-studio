@@ -4,6 +4,7 @@ import { Download } from 'lucide-react';
 import { fetchCartolaFromSupabase } from '@/services/cartolaService';
 import { type CartolaData } from '@/services/api';
 import { formatCurrency, getCurrentMonth, convertToCSV, downloadCSV, formatMonthYear } from '@/utils/formatters';
+import { supabase } from '@/integrations/supabase/client';
 
 export function CartolaView() {
   const { user } = useAuth();
@@ -45,6 +46,41 @@ export function CartolaView() {
     const csv = convertToCSV(cartolaData as Record<string, unknown>[]);
     downloadCSV(csv, `cartola_${monthInput}.csv`);
   };
+
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (user) {
+      const checkSubscription = async () => {
+        const { data } = await supabase
+          .from('profiles')
+          .select('subscription_status')
+          .eq('id', user.id)
+          .single();
+        setSubscriptionStatus(data?.subscription_status || null);
+      };
+      checkSubscription();
+    }
+  }, [user]);
+
+  if (subscriptionStatus !== 'active' && subscriptionStatus !== 'trial') {
+    return (
+      <section className="flex flex-col h-full pt-2 animate-fade-in items-center justify-center">
+        <div className="ios-card p-6 text-center max-w-sm mx-4">
+          <h2 className="text-xl font-bold mb-2">Suscripción Requerida</h2>
+          <p className="text-muted-foreground mb-4">
+            Debes tener una suscripción activa para ver tu Cartola y descargar reportes.
+          </p>
+          <a
+            href="/"
+            className="inline-block bg-primary text-primary-foreground font-semibold py-2 px-4 rounded-lg shadow hover:bg-primary/90 transition-colors"
+          >
+            Ir a Suscribirse
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col h-full pt-2 animate-fade-in">

@@ -4,9 +4,11 @@ import { MonthSelector } from './MonthSelector';
 import { StatCard } from './StatCard';
 import { TrendChart } from './TrendChart';
 import { ActivityList } from './ActivityList';
+import { SubscriptionButton } from '../subscription/SubscriptionButton';
 import { useAppState } from '@/hooks/useAppState';
 import { fetchDashboardFromSupabase } from '@/services/dashboardService';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 type LoadState = 'loading' | 'success' | 'error';
 
@@ -26,6 +28,8 @@ export function DashboardView() {
 
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [mensual, setMensual] = useState(0);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
+  const [trialDaysRemaining, setTrialDaysRemaining] = useState<number | null>(null);
 
   const loadDashboardData = async () => {
     if (!user) return;
@@ -69,6 +73,37 @@ export function DashboardView() {
   useEffect(() => {
     if (user) {
       loadDashboardData();
+
+      const checkSubscription = async () => {
+        const { data } = await supabase
+          .from('profiles')
+          .select('subscription_status, trial_end_date')
+          .eq('id', user.id)
+          .single();
+
+        if (data) {
+          let status = data.subscription_status;
+
+          if (status === 'trial' && data.trial_end_date) {
+            const endDate = new Date(data.trial_end_date);
+            const now = new Date();
+            const diffTime = endDate.getTime() - now.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 0) {
+              // Trial expired locally
+              status = 'inactive';
+              // Update DB to reflect expired status
+              await supabase.from('profiles').update({ subscription_status: 'inactive' }).eq('id', user.id);
+            } else {
+              setTrialDaysRemaining(diffDays);
+            }
+          }
+
+          setSubscriptionStatus(status);
+        }
+      };
+      checkSubscription();
     }
   }, [currentDashboardDate, user]);
 
@@ -118,43 +153,69 @@ export function DashboardView() {
         onNext={() => changeMonth(1)}
       />
 
+      {subscriptionStatus === 'trial' && trialDaysRemaining !== null && (
+        <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CloudLightning className="w-4 h-4 text-primary fill-current" />
+            <span className="text-xs font-semibold text-primary">
+              Prueba Gratuita
+            </span>
+          </div>
+          <span className="text-xs font-bold text-foreground">
+            {trialDaysRemaining} días restantes
+          </span>
+        </div>
+      )}
+
+      {(subscriptionStatus !== 'active' && subscriptionStatus !== 'trial') && (
+        <div className="px-1">
+          <SubscriptionButton />
+        </div>
+      )}
+
       {/* Monthly Total - Large Card */}
-      <StatCard
-        title="Acumulado Mes"
-        value={mensual}
-        icon={<Wallet className="w-4 h-4" />}
-        iconBgColor="bg-primary/10"
-        iconTextColor="text-primary"
-        size="large"
-      />
+      <div className={subscriptionStatus !== 'active' && subscriptionStatus !== 'trial' ? 'blur-sm pointer-events-none select-none opacity-50' : ''}>
+        <StatCard
+          title="Acumulado Mes"
+          value={mensual}
+          icon={<Wallet className="w-4 h-4" />}
+          iconBgColor="bg-primary/10"
+          iconTextColor="text-primary"
+          size="large"
+        />
 
-      {/* Today and Week Grid */}
-      <div className="grid grid-cols-2 gap-4">
-        <StatCard
-          title="Hoy"
-          value={cachedRealTimeData?.diario || 0}
-          icon={<CalendarDays className="w-4 h-4" />}
-          iconBgColor="bg-emerald/10"
-          iconTextColor="text-emerald"
-          showPulse
-          comparison={cachedRealTimeData?.comparativa}
-        />
-        <StatCard
-          title="Semana"
-          value={cachedRealTimeData?.semanal || 0}
-          icon={<CalendarRange className="w-4 h-4" />}
-          iconBgColor="bg-purple/10"
-          iconTextColor="text-purple"
-          showPulse
-          badge="En curso"
-        />
+        {/* Today and Week Grid */}
+        <div className="grid grid-cols-2 gap-4 mt-5">
+          <StatCard
+            title="Hoy"
+            value={cachedRealTimeData?.diario || 0}
+            icon={<CalendarDays className="w-4 h-4" />}
+            iconBgColor="bg-emerald/10"
+            iconTextColor="text-emerald"
+            showPulse
+            comparison={cachedRealTimeData?.comparativa}
+          />
+          <StatCard
+            title="Semana"
+            value={cachedRealTimeData?.semanal || 0}
+            icon={<CalendarRange className="w-4 h-4" />}
+            iconBgColor="bg-purple/10"
+            iconTextColor="text-purple"
+            showPulse
+            badge="En curso"
+          />
+        </div>
+
+        {/* Trend Chart */}
+        <div className="mt-5">
+          <TrendChart data={cachedChartData} />
+        </div>
+
+        {/* Activity List */}
+        <div className="mt-5">
+          <ActivityList movements={cachedRecentMovements.slice(0, 5)} />
+        </div>
       </div>
-
-      {/* Trend Chart */}
-      <TrendChart data={cachedChartData} />
-
-      {/* Activity List */}
-      <ActivityList movements={cachedRecentMovements} />
     </section>
   );
 }

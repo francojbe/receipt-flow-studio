@@ -82,6 +82,8 @@ export type Database = {
           monto_total: number | null
           nombre_comercio: string
           rut_emisor: string | null
+          type: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
@@ -91,6 +93,8 @@ export type Database = {
           monto_total?: number | null
           nombre_comercio: string
           rut_emisor?: string | null
+          type?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
@@ -100,6 +104,8 @@ export type Database = {
           monto_total?: number | null
           nombre_comercio?: string
           rut_emisor?: string | null
+          type?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -240,7 +246,11 @@ export type Database = {
           id: string
           metadata: Json | null
           nombre: string
+          plan_type: string | null
+          subscription_status: string | null
           tipo: string
+          trial_end_date: string | null
+          trial_start_date: string | null
           updated_at: string
         }
         Insert: {
@@ -248,7 +258,11 @@ export type Database = {
           id: string
           metadata?: Json | null
           nombre: string
+          plan_type?: string | null
+          subscription_status?: string | null
           tipo: string
+          trial_end_date?: string | null
+          trial_start_date?: string | null
           updated_at?: string
         }
         Update: {
@@ -256,7 +270,11 @@ export type Database = {
           id?: string
           metadata?: Json | null
           nombre?: string
+          plan_type?: string | null
+          subscription_status?: string | null
           tipo?: string
+          trial_end_date?: string | null
+          trial_start_date?: string | null
           updated_at?: string
         }
         Relationships: []
