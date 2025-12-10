@@ -9,7 +9,7 @@ interface UploadSectionProps {
 export function UploadSection({ onCameraClick, onGalleryClick, onManualClick }: UploadSectionProps) {
   return (
     <div className="flex flex-col gap-4 mt-4 animate-fade-in">
-      <p className="text-center text-muted-foreground font-medium text-sm mb-2">
+      <p className="text-center text-brand-dark/90 font-medium text-sm mb-2">
         Selecciona un método
       </p>
 
@@ -19,10 +19,10 @@ export function UploadSection({ onCameraClick, onGalleryClick, onManualClick }: 
           onClick={onCameraClick}
           className="flex flex-col items-center justify-center p-6 ios-card press-effect group h-40"
         >
-          <div className="w-14 h-14 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+          <div className="w-14 h-14 rounded-full bg-white/10 text-white flex items-center justify-center mb-3 group-hover:bg-white group-hover:text-black transition-colors backdrop-blur-sm">
             <Camera className="w-6 h-6" />
           </div>
-          <span className="font-semibold text-foreground text-sm">Foto Boleta</span>
+          <span className="font-semibold text-white text-sm tracking-wide">Foto Boleta</span>
         </button>
 
         {/* Gallery Button */}
@@ -30,10 +30,10 @@ export function UploadSection({ onCameraClick, onGalleryClick, onManualClick }: 
           onClick={onGalleryClick}
           className="flex flex-col items-center justify-center p-6 ios-card press-effect group h-40"
         >
-          <div className="w-14 h-14 rounded-full bg-purple/10 text-purple flex items-center justify-center mb-3 group-hover:bg-purple group-hover:text-purple-foreground transition-colors">
+          <div className="w-14 h-14 rounded-full bg-white/10 text-white flex items-center justify-center mb-3 group-hover:bg-white group-hover:text-black transition-colors backdrop-blur-sm">
             <Images className="w-6 h-6" />
           </div>
-          <span className="font-semibold text-foreground text-sm">Galería</span>
+          <span className="font-semibold text-white text-sm tracking-wide">Galería</span>
         </button>
 
         {/* Manual Entry Button */}
@@ -41,14 +41,14 @@ export function UploadSection({ onCameraClick, onGalleryClick, onManualClick }: 
           onClick={onManualClick}
           className="col-span-2 flex flex-row items-center gap-5 p-5 ios-card press-effect group"
         >
-          <div className="w-12 h-12 rounded-full bg-warning/10 text-warning flex-shrink-0 flex items-center justify-center group-hover:bg-warning group-hover:text-warning-foreground transition-colors">
+          <div className="w-12 h-12 rounded-full bg-white/10 text-white flex-shrink-0 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-colors backdrop-blur-sm">
             <PenSquare className="w-5 h-5" />
           </div>
           <div className="text-left">
-            <span className="block font-semibold text-foreground text-base">Ingreso Manual</span>
-            <span className="block text-muted-foreground text-xs mt-0.5">Sin comprobante físico</span>
+            <span className="block font-semibold text-white text-base tracking-wide">Ingreso Manual</span>
+            <span className="block text-white/50 text-xs mt-0.5">Sin comprobante físico</span>
           </div>
-          <div className="ml-auto text-muted-foreground/50">
+          <div className="ml-auto text-white/30">
             <ChevronRight className="w-5 h-5" />
           </div>
         </button>

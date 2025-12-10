@@ -70,6 +70,14 @@ export default {
           DEFAULT: "hsl(var(--indigo))",
           foreground: "hsl(var(--indigo-foreground))",
         },
+        'brand-lime': {
+          DEFAULT: '#BEF264', // Lime-400 equivalent or custom
+          foreground: '#1A2E05',
+        },
+        'brand-dark': {
+          DEFAULT: '#1A2E05', // Very dark green/black
+          foreground: '#FFFFFF',
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

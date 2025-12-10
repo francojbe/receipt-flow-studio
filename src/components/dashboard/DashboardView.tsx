@@ -154,14 +154,14 @@ export function DashboardView() {
       />
 
       {subscriptionStatus === 'trial' && trialDaysRemaining !== null && (
-        <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 flex items-center justify-between">
+        <div className="bg-white/10 border border-white/20 rounded-xl p-3 flex items-center justify-between backdrop-blur-md">
           <div className="flex items-center gap-2">
-            <CloudLightning className="w-4 h-4 text-primary fill-current" />
-            <span className="text-xs font-semibold text-primary">
+            <CloudLightning className="w-4 h-4 text-yellow-400 fill-current" />
+            <span className="text-xs font-semibold text-white">
               Prueba Gratuita
             </span>
           </div>
-          <span className="text-xs font-bold text-foreground">
+          <span className="text-xs font-bold text-white">
             {trialDaysRemaining} días restantes
           </span>
         </div>
@@ -179,8 +179,8 @@ export function DashboardView() {
           title="Acumulado Mes"
           value={mensual}
           icon={<Wallet className="w-4 h-4" />}
-          iconBgColor="bg-primary/10"
-          iconTextColor="text-primary"
+          iconBgColor="bg-white/10"
+          iconTextColor="text-white"
           size="large"
         />
 
@@ -190,8 +190,8 @@ export function DashboardView() {
             title="Hoy"
             value={cachedRealTimeData?.diario || 0}
             icon={<CalendarDays className="w-4 h-4" />}
-            iconBgColor="bg-emerald/10"
-            iconTextColor="text-emerald"
+            iconBgColor="bg-white/10"
+            iconTextColor="text-emerald-400"
             showPulse
             comparison={cachedRealTimeData?.comparativa}
           />
@@ -199,8 +199,8 @@ export function DashboardView() {
             title="Semana"
             value={cachedRealTimeData?.semanal || 0}
             icon={<CalendarRange className="w-4 h-4" />}
-            iconBgColor="bg-purple/10"
-            iconTextColor="text-purple"
+            iconBgColor="bg-white/10"
+            iconTextColor="text-purple-400"
             showPulse
             badge="En curso"
           />

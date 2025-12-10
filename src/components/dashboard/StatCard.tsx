@@ -42,7 +42,7 @@ export function StatCard({
             {icon}
           </div>
           {isLarge && (
-            <span className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+            <span className="text-sm font-medium text-white/60 uppercase tracking-wider">
               {title}
             </span>
           )}
@@ -52,18 +52,18 @@ export function StatCard({
 
       <div className={isLarge ? '' : 'mt-2'}>
         {!isLarge && (
-          <span className="text-xs font-semibold text-muted-foreground uppercase">{title}</span>
+          <span className="text-xs font-semibold text-white/60 uppercase">{title}</span>
         )}
         <h3
           className={cn(
-            'font-bold text-foreground tracking-tight',
+            'font-bold text-white tracking-tight',
             isLarge ? 'text-4xl' : 'text-xl mt-0.5'
           )}
         >
           {formatCurrency(value)}
         </h3>
         {isLarge && (
-          <span className="text-sm text-muted-foreground mt-1 font-medium">CLP Total</span>
+          <span className="text-sm text-white/50 mt-1 font-medium">CLP Total</span>
         )}
       </div>
 
@@ -72,7 +72,7 @@ export function StatCard({
       )}
 
       {badge && typeof badge === 'string' && (
-        <div className="mt-2 text-[10px] font-medium px-2 py-1 bg-secondary rounded-lg w-fit text-muted-foreground">
+        <div className="mt-2 text-[10px] font-medium px-2 py-1 bg-white/10 rounded-lg w-fit text-white/80">
           {badge}
         </div>
       )}
@@ -89,7 +89,7 @@ function ComparisonBadge({ value }: { value: number }) {
       </div>
     );
   }
-  
+
   if (value < 0) {
     return (
       <div className="mt-2 text-[10px] font-medium px-2 py-1 rounded-lg bg-destructive/10 text-destructive w-fit flex items-center gap-1">

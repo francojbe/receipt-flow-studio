@@ -8,7 +8,7 @@ interface TrendChartProps {
 export function TrendChart({ data }: TrendChartProps) {
   return (
     <div className="ios-card p-6">
-      <h3 className="text-sm font-semibold text-foreground mb-4">Tendencia</h3>
+      <h3 className="text-sm font-semibold text-white mb-4">Tendencia</h3>
       <div className="h-40 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 5, right: 5, left: 0, bottom: 0 }}>
@@ -22,12 +22,12 @@ export function TrendChart({ data }: TrendChartProps) {
               dataKey="dia"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: 'hsl(240, 3%, 56%)' }}
+              tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.6)' }}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 10, fill: 'hsl(240, 3%, 56%)' }}
+              tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.6)' }}
               tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
             />
             <Tooltip

@@ -7,8 +7,10 @@
 @layer base {
   :root {
     /* iOS System Colors */
-    --background: 240 6% 97%; /* #F2F2F7 */
-    --foreground: 0 0% 11%; /* #1C1C1E */
+    --background: 240 6% 97%;
+    /* #F2F2F7 */
+    --foreground: 0 0% 11%;
+    /* #1C1C1E */
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 11%;
@@ -17,14 +19,16 @@
     --popover-foreground: 0 0% 11%;
 
     /* Apple Blue */
-    --primary: 211 100% 50%; /* #007AFF */
+    --primary: 211 100% 50%;
+    /* #007AFF */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 5% 96%;
     --secondary-foreground: 0 0% 11%;
 
     --muted: 240 5% 96%;
-    --muted-foreground: 240 3% 56%; /* #8E8E93 */
+    --muted-foreground: 240 3% 56%;
+    /* #8E8E93 */
 
     --accent: 240 5% 96%;
     --accent-foreground: 0 0% 11%;
@@ -33,9 +37,11 @@
     --destructive-foreground: 0 0% 100%;
 
     /* iOS Colors */
-    --success: 142 71% 45%; /* Green */
+    --success: 142 71% 45%;
+    /* Green */
     --success-foreground: 0 0% 100%;
-    --warning: 32 95% 44%; /* Orange */
+    --warning: 32 95% 44%;
+    /* Orange */
     --warning-foreground: 0 0% 100%;
     --purple: 280 73% 60%;
     --purple-foreground: 0 0% 100%;
@@ -107,10 +113,12 @@
 }
 
 @layer utilities {
+
   /* Hide scrollbar */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -126,14 +134,15 @@
 }
 
 @layer components {
+
   /* Glassmorphism */
   .glass {
     @apply bg-white/80 backdrop-blur-xl border-white/20;
   }
 
-  /* iOS Card Style */
+  /* iOS Card Style - Dark Glass Reference */
   .ios-card {
-    @apply bg-card rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-border/50;
+    @apply bg-black/30 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-white/15;
   }
 
   /* Loader Animation */
@@ -144,7 +153,9 @@
   }
 
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   /* Fade In Animation */
@@ -153,13 +164,14 @@
   }
 
   @keyframes fadeIn {
-    from { 
-      opacity: 0; 
-      transform: scale(0.98); 
+    from {
+      opacity: 0;
+      transform: scale(0.98);
     }
-    to { 
-      opacity: 1; 
-      transform: scale(1); 
+
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
