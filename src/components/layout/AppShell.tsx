@@ -131,7 +131,7 @@ function BottomNav({ currentView, onViewChange }: BottomNavProps) {
   ];
 
   return (
-    <nav className="absolute bottom-8 left-6 right-6 bg-white/80 backdrop-blur-md border border-white/40 rounded-full shadow-2xl flex justify-between items-center p-2 z-50">
+    <nav className="absolute bottom-12 left-6 right-6 bg-white/80 backdrop-blur-md border border-white/40 rounded-full shadow-2xl flex justify-around items-center p-2 z-50 transition-all duration-300 ease-in-out">
       {navItems.map(({ view, icon, label }) => {
         const isActive = currentView === view;
         return (
