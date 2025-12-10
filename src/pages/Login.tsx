@@ -87,7 +87,7 @@ const Login = () => {
                                     placeholder="Email"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full bg-white border border-gray-200 focus:border-brand-dark focus:bg-white rounded-full py-3.5 pl-12 pr-4 text-sm font-medium outline-none transition-all placeholder:text-gray-400"
+                                    className="w-full bg-white border border-gray-200 focus:border-brand-dark focus:bg-white rounded-full py-3.5 pl-12 pr-4 text-sm font-medium outline-none transition-all placeholder:text-gray-400 text-brand-dark"
                                     required
                                 />
                             </div>
@@ -103,7 +103,7 @@ const Login = () => {
                                     placeholder="Contraseña"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full bg-white border border-gray-200 focus:border-brand-dark focus:bg-white rounded-full py-3.5 pl-12 pr-12 text-sm font-medium outline-none transition-all placeholder:text-gray-400"
+                                    className="w-full bg-white border border-gray-200 focus:border-brand-dark focus:bg-white rounded-full py-3.5 pl-12 pr-12 text-sm font-medium outline-none transition-all placeholder:text-gray-400 text-brand-dark"
                                     required
                                 />
                                 <button
